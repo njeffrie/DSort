@@ -8,9 +8,9 @@ public class Client {
   static ObjectOutputStream objectOut;
   static ObjectInputStream objectIn;
 
-  public static void sendArrayList(ArrayList<Integer> list){
+  public static void sendArrayList(ArrayList<Integer> list, int port){
     try {
-      Socket sock = new Socket("localhost", 6066);
+      Socket sock = new Socket("localhost", port);
       ObjectOutputStream ObjectOut = new ObjectOutputStream(sock.getOutputStream());
       ObjectOut.writeObject(list);
     }
@@ -20,9 +20,9 @@ public class Client {
     }
   }
 
-  public static ArrayList<Integer>  getArrayList() {
+  public static ArrayList<Integer>  getArrayList(int port) {
     try {
-      Socket sock = new Socket("localhost", 6066);
+      Socket sock = new Socket("localhost", port);
       ObjectInputStream ObjectIn = new ObjectInputStream(sock.getInputStream());
       Object object = ObjectIn.readObject();
       @SuppressWarnings("unchecked")
@@ -54,7 +54,8 @@ public class Client {
   
   public static void main(String [] args){
     try {
-      soc = new Socket("localhost", 6060);
+      int port = Integer.parseInt(args[0]);
+      soc = new Socket("localhost", port);
       objectOut = new ObjectOutputStream(soc.getOutputStream());
       objectIn = new ObjectInputStream(soc.getInputStream());
     } catch(Exception e) {

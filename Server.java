@@ -22,7 +22,9 @@ public class Server extends Thread{
         Object object = objectInput.readObject();
         @SuppressWarnings("unchecked")
         ArrayList<Integer> list = (ArrayList<Integer>) object;
+        System.out.println(list);
         Collections.sort(list);
+        System.out.println(list);
         ObjectOutputStream objectOutput = 
           new ObjectOutputStream(server.getOutputStream());
         objectOutput.writeObject(list);
