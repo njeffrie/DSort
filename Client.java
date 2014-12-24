@@ -59,18 +59,25 @@ public class Client {
   }
 
   public static void main(String [] args){
-    if(args.length != 1){
-      System.out.println("Usage: arg0 = port number");
+    if(args.length != 2){
+      System.out.println("Usage: arg0 = port number, arg1 = source file name");
       System.exit(1);
     }
     try {
-      Socket soc = new Socket("localhost", Integer.parseInt(args[0]));
-      objectOut = new ObjectOutputStream(soc.getOutputStream());
-      ArrayList<Integer> list = readRandomFile("random_numbers");
-      sendArrayList(list);
-      objectIn = new ObjectInputStream(soc.getInputStream());
-      ArrayList<Integer> sortedlist = getArrayList();
-      writeRandomFile("sorted_numbers", sortedlist);
+      try {
+        Socket soc = new Socket("localhost", Integer.parseInt(args[0]));
+        objectOut = new ObjectOutputStream(soc.getOutputStream());
+        ArrayList<Integer> list = readRandomFile(args[1]);
+        //System.out.println("Unsorted List:\n"+list);
+        sendArrayList(list);
+        objectIn = new ObjectInputStream(soc.getInputStream());
+        ArrayList<Integer> sortedlist = getArrayList();
+        //System.out.println("Sorted List:\n"+sortedlist);
+        writeRandomFile("sorted_numbers", list);
+      } catch(ConnectException ce) {
+        System.out.println("Failed to connect. Check port compatibility, make sure Server is running");
+        System.exit(1);
+      }
     } catch(Exception e) {
       e.printStackTrace();
     }
