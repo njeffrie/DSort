@@ -3,11 +3,14 @@ import java.io.*;
 import java.net.*;
 
 public class Client {
+
+  static Socket soc;
+  static ObjectOutputStream objectOut;
+  static ObjectInputStream objectIn;
+
   public static void sendArrayList(ArrayList<Integer> list){
     try {
-      Socket sock = new Socket("Server", 6060);
-      ObjectOutputStream ObjectOut = new ObjectOutputStream(sock.getOutputStream());
-      ObjectOut.writeObject(list);
+      objectOut.writeObject(list);
     }
     catch (Exception e)
     {
@@ -18,9 +21,7 @@ public class Client {
   public static ArrayList<Integer>  getArrayList() {
     try {
       //ArrayList<Integer> list = new ArrayList<Integer>();
-      Socket sock = new Socket("Server", 6060);
-      ObjectInputStream ObjectIn = new ObjectInputStream(sock.getInputStream());
-      Object object = ObjectIn.readObject();
+      Object object = objectIn.readObject();
       @SuppressWarnings("unchecked")
       ArrayList<Integer> list = (ArrayList<Integer>) object;
       return list;
@@ -29,7 +30,9 @@ public class Client {
       e.printStackTrace();
     }
     // only happens if error occurs
-    return null;
+    System.out.println("fatal: no object read from ObjectInputStream");
+    System.exit(1);
+		return null;
   }
 
   public static ArrayList<Integer> readRandomFile (String fname){
@@ -47,6 +50,13 @@ public class Client {
   }
   
   public static void main(String [] args){
+    try {
+      soc = new Socket("localhost", 6060);
+      objectOut = new ObjectOutputStream(soc.getOutputStream());
+      objectIn = new ObjectInputStream(soc.getInputStream());
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
     ArrayList<Integer> list = readRandomFile("random_numbers");
     sendArrayList(list);
     ArrayList<Integer> sortedlist = getArrayList();
