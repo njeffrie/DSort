@@ -10,7 +10,9 @@ public class Client {
 
   public static void sendArrayList(ArrayList<Integer> list){
     try {
-      objectOut.writeObject(list);
+      Socket sock = new Socket("localhost", 6066);
+      ObjectOutputStream ObjectOut = new ObjectOutputStream(sock.getOutputStream());
+      ObjectOut.writeObject(list);
     }
     catch (Exception e)
     {
@@ -20,8 +22,9 @@ public class Client {
 
   public static ArrayList<Integer>  getArrayList() {
     try {
-      //ArrayList<Integer> list = new ArrayList<Integer>();
-      Object object = objectIn.readObject();
+      Socket sock = new Socket("localhost", 6066);
+      ObjectInputStream ObjectIn = new ObjectInputStream(sock.getInputStream());
+      Object object = ObjectIn.readObject();
       @SuppressWarnings("unchecked")
       ArrayList<Integer> list = (ArrayList<Integer>) object;
       return list;
@@ -58,6 +61,7 @@ public class Client {
       e.printStackTrace();
     }
     ArrayList<Integer> list = readRandomFile("random_numbers");
+    System.out.println(list);
     sendArrayList(list);
     ArrayList<Integer> sortedlist = getArrayList();
   }
