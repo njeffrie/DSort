@@ -50,14 +50,19 @@ public class Client {
   public static void main(String [] args){
     try {
       Socket soc = new Socket("localhost", Integer.parseInt(args[0]));
+      System.out.println("created socket");
       objectOut = new ObjectOutputStream(soc.getOutputStream());
-      objectIn = new ObjectInputStream(soc.getInputStream());
-    } catch(Exception e) {
-      e.printStackTrace();
-    }
+      System.out.println("created output stream");
+    System.out.println("starting file read");
     ArrayList<Integer> list = readRandomFile("random_numbers");
     System.out.println(list);
     sendArrayList(list);
+    objectIn = new ObjectInputStream(soc.getInputStream());
+    System.out.println("created input stream");
     ArrayList<Integer> sortedlist = getArrayList();
+    System.out.println(sortedlist);
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
   }
 }
