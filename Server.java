@@ -2,21 +2,45 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
-public class Server{
-  public static void main(String[] args) {
-    try 
+public class Server extends Thread{
+  private ServerSocket serverSocket;
+
+  public Server(int port) throws IOException
+  {
+    serverSocket = new ServerSocket(port);
+  }
+
+  public void run()
+  {
+    while (true)
     {
-      ServerSocket myServerSocket = new ServerSocket(6060);
-      Socket skt = myServerSocket.accept();
-      ObjectInputStream in = new ObjectInputStream(skt.getInputStream());
-      Object object = in.readObject();
-      @SuppressWarnings("unchecked")
-      ArrayList<Integer> list = (ArrayList<Integer>) object;
-      Collections.sort(list);
-      ObjectOutputStream out = new ObjectOutputStream(skt.getOutputStream());
-      out.writeObject(list);
+      try
+      {
+        Socket server = serverSocket.accept();
+        ObjectInputStream objectInput = 
+          new ObjectInputStream(server.getInputStream());
+        Object object = objectInput.readObject();
+        @SuppressWarnings("unchecked")
+        ArrayList<Integer> list = (ArrayList<Integer>) object;
+        Collections.sort(list);
+        ObjectOutputStream objectOutput = 
+          new ObjectOutputStream(server.getOutputStream());
+        objectOutput.writeObject(list);
+      }
+      catch (Exception e)
+      {
+        e.printStackTrace();
+      }
     }
-    catch (Exception e)
+  }
+
+  public static void main(String[] args) {
+    int port = Integer.parseInt(args[0]);
+    try
+    {
+      Thread t = new Server(port);
+      t.start();
+    }catch (IOException e)
     {
       e.printStackTrace();
     }

@@ -5,7 +5,7 @@ import java.net.*;
 public class Client {
   public static void sendArrayList(ArrayList<Integer> list){
     try {
-      Socket sock = new Socket("Server", 6060);
+      Socket sock = new Socket("localhost", 6066);
       ObjectOutputStream ObjectOut = new ObjectOutputStream(sock.getOutputStream());
       ObjectOut.writeObject(list);
     }
@@ -17,8 +17,7 @@ public class Client {
 
   public static ArrayList<Integer>  getArrayList() {
     try {
-      //ArrayList<Integer> list = new ArrayList<Integer>();
-      Socket sock = new Socket("Server", 6060);
+      Socket sock = new Socket("localhost", 6066);
       ObjectInputStream ObjectIn = new ObjectInputStream(sock.getInputStream());
       Object object = ObjectIn.readObject();
       @SuppressWarnings("unchecked")
@@ -48,6 +47,7 @@ public class Client {
   
   public static void main(String [] args){
     ArrayList<Integer> list = readRandomFile("random_numbers");
+    System.out.println(list);
     sendArrayList(list);
     ArrayList<Integer> sortedlist = getArrayList();
   }
