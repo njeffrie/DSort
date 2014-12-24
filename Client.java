@@ -51,7 +51,9 @@ public class Client {
     throws FileNotFoundException 
   {
     PrintWriter pout = new PrintWriter(fname);
-    pout.print(list);
+    for (int i=0; i<list.size(); i++){
+      pout.print(list.get(i) + " ");
+    }
     pout.flush();
     pout.close();
   }
@@ -63,16 +65,12 @@ public class Client {
     }
     try {
       Socket soc = new Socket("localhost", Integer.parseInt(args[0]));
-      //System.out.println("created socket");
       objectOut = new ObjectOutputStream(soc.getOutputStream());
       ArrayList<Integer> list = readRandomFile("random_numbers");
-      System.out.println("Unsorted List:\n"+list);
       sendArrayList(list);
       objectIn = new ObjectInputStream(soc.getInputStream());
-      //System.out.println("created input stream");
       ArrayList<Integer> sortedlist = getArrayList();
-      System.out.println("Sorted List:\n"+sortedlist);
-      writeRandomFile("sorted_numbers", list);
+      writeRandomFile("sorted_numbers", sortedlist);
     } catch(Exception e) {
       e.printStackTrace();
     }
