@@ -47,6 +47,15 @@ public class Client {
     return null;
   }
   
+  public static void writeRandomFile (String fname, ArrayList<Integer> list) 
+    throws FileNotFoundException 
+  {
+    PrintWriter pout = new PrintWriter(fname);
+    pout.print(list);
+    pout.flush();
+    pout.close();
+  }
+
   public static void main(String [] args){
     try {
       Socket soc = new Socket("localhost", Integer.parseInt(args[0]));
@@ -61,6 +70,7 @@ public class Client {
     System.out.println("created input stream");
     ArrayList<Integer> sortedlist = getArrayList();
     System.out.println(sortedlist);
+      writeRandomFile("sorted_numbers", list);
     } catch(Exception e) {
       e.printStackTrace();
     }
