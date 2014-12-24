@@ -73,7 +73,7 @@ public class Client {
         objectIn = new ObjectInputStream(soc.getInputStream());
         ArrayList<Integer> sortedlist = getArrayList();
         //System.out.println("Sorted List:\n"+sortedlist);
-        writeRandomFile("sorted_numbers", list);
+        writeRandomFile("sorted_numbers", sortedlist);
       } catch(ConnectException ce) {
         System.out.println("Failed to connect. Check port compatibility, make sure Server is running");
         System.exit(1);
